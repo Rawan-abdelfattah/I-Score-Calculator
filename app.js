@@ -9,7 +9,7 @@ const app = express();
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static('public'));  
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -17,7 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 const dbConfigs = {
   users: {
     host: 'localhost',
-    user: 'root',
+    user: 'root',   
     password: '',
     database: 'dda_users'
   },
@@ -124,7 +124,7 @@ app.post('/calculate-score', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 }); 
