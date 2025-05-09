@@ -8,26 +8,69 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
       body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-family: 'Poppins', sans-serif;
       }
       .card {
-        border-radius: 15px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+      }
+      .card h2 {
+        color: #2d3748;
+        font-weight: 600;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+      }
+      .form-label {
+        font-weight: 500;
+        color: #4a5568;
+        margin-bottom: 0.5rem;
+      }
+      .form-control {
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+      }
+      .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
       }
       .score-display {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #2c3e50;
+        font-size: 4rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
       }
       .score-label {
         font-size: 1.2rem;
-        color: #7f8c8d;
+        color: #718096;
+        font-weight: 500;
       }
       .loading {
         display: none;
@@ -35,6 +78,51 @@
       .alert {
         display: none;
         margin-top: 1rem;
+        border-radius: 10px;
+      }
+      #result {
+        background: #f7fafc;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+      }
+      #result h5 {
+        color: #2d3748;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      #result p {
+        color: #4a5568;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+      }
+      #result span {
+        font-weight: 600;
+        color: #667eea;
+      }
+      .spinner-border {
+        color: #667eea;
+      }
+      .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .icon-wrapper i {
+        font-size: 1.2rem;
+        color: #667eea;
+      }
+      .score-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .breakdown-icon {
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+        color: #667eea;
       }
     </style>
   </head>
@@ -43,10 +131,16 @@
       <div class="row justify-content-center">
         <div class="col-md-6">
           <div class="card p-4">
-            <h2 class="text-center mb-4">Credit I-Score Calculator</h2>
+            <h2 class="text-center mb-4">
+              <i class="fas fa-calculator me-2"></i>
+              Credit I-Score Calculator
+            </h2>
             <form id="scoreForm">
               <div class="mb-3">
-                <label for="national_id" class="form-label">National ID</label>
+                <label for="national_id" class="form-label">
+                  <i class="fas fa-id-card me-2"></i>
+                  National ID
+                </label>
                 <input
                   type="text"
                   class="form-control"
@@ -56,11 +150,15 @@
                 />
               </div>
               <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-calculator me-2"></i>
                 Calculate Score
               </button>
             </form>
 
-            <div class="alert alert-danger" id="errorAlert" role="alert"></div>
+            <div class="alert alert-danger" id="errorAlert" role="alert">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              <span></span>
+            </div>
 
             <div class="loading text-center mt-4">
               <div class="spinner-border text-primary" role="status">
@@ -70,19 +168,35 @@
 
             <div id="result" class="mt-4" style="display: none">
               <div class="text-center">
+                <i class="fas fa-chart-line score-icon"></i>
                 <div class="score-display" id="score">0</div>
                 <div class="score-label">Credit Score</div>
               </div>
               <div class="mt-4">
-                <h5>Score Breakdown:</h5>
+                <h5>
+                  <i class="fas fa-list-ul me-2"></i>
+                  Score Breakdown:
+                </h5>
                 <div class="row">
                   <div class="col-6">
-                    <p>Payment History: <span id="paymentScore">0</span>%</p>
-                    <p>Outstanding Debt: <span id="debtScore">0</span>%</p>
+                    <p>
+                      <i class="fas fa-history breakdown-icon"></i>
+                      Payment History: <span id="paymentScore">0</span>%
+                    </p>
+                    <p>
+                      <i class="fas fa-money-bill-wave breakdown-icon"></i>
+                      Outstanding Debt: <span id="debtScore">0</span>%
+                    </p>
                   </div>
                   <div class="col-6">
-                    <p>Credit History: <span id="historyScore">0</span>%</p>
-                    <p>Credit Mix: <span id="mixScore">0</span>%</p>
+                    <p>
+                      <i class="fas fa-clock breakdown-icon"></i>
+                      Credit History: <span id="historyScore">0</span>%
+                    </p>
+                    <p>
+                      <i class="fas fa-layer-group breakdown-icon"></i>
+                      Credit Mix: <span id="mixScore">0</span>%
+                    </p>
                   </div>
                 </div>
               </div>
@@ -101,12 +215,13 @@
           const loading = document.querySelector('.loading');
           const result = document.getElementById('result');
           const errorAlert = document.getElementById('errorAlert');
+          const errorSpan = errorAlert.querySelector('span');
 
           // Reset UI
           loading.style.display = 'block';
           result.style.display = 'none';
           errorAlert.style.display = 'none';
-          errorAlert.textContent = '';
+          errorSpan.textContent = '';
 
           try {
             const response = await fetch('/calculate-score', {
@@ -137,15 +252,12 @@
               );
               result.style.display = 'block';
             } else {
-              console.log(data);
-              
-              errorAlert.textContent =
+              errorSpan.textContent =
                 data.message || 'Error calculating score. Please try again.';
               errorAlert.style.display = 'block';
             }
           } catch (error) {
-            console.log("🚀 ~ .addEventListener ~ error:", error)
-            errorAlert.textContent = error.message || 'An error occurred. Please try again.';
+            errorSpan.textContent = error.message || 'An error occurred. Please try again.';
             errorAlert.style.display = 'block';
           } finally {
             loading.style.display = 'none';
